@@ -1,4 +1,4 @@
-import { Product } from "@/Types"
+import { Product } from "@/types"
 
 type Props = {
     product: Product
@@ -68,7 +68,7 @@ export default function ProductCard({ product }: Props) {
                     {product.currency}
                 </span>
             </p>
-            <button className="panier"><i class="fa-solid fa-basket-shopping"></i> Ajoute au panier</button>
+            <button className="panier"><i className="fa-solid fa-basket-shopping"></i> Ajoute au panier</button>
         </a>
     )
 }
