@@ -1,11 +1,6 @@
-import Checkbox from '@/Components/Checkbox';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
+import GuestLayout from "@/Layouts/GuestLayout";
+import { Head, Link, useForm } from "@inertiajs/react";
+import { FormEvent } from "react";
 
 export default function Login({
     status,
@@ -15,96 +10,93 @@ export default function Login({
     canResetPassword: boolean;
 }) {
     const { data, setData, post, processing, errors, reset } = useForm({
-        email: '',
-        password: '',
-        remember: false as boolean,
+        email: "",
+        password: "",
+        remember: false,
     });
 
-    const submit: FormEventHandler = (e) => {
-        e.preventDefault();
+    const submit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
-        post(route('login'), {
-            onFinish: () => reset('password'),
+        post(route("login"), {
+            onFinish: () => reset("password"),
         });
     };
 
     return (
         <GuestLayout>
-            <Head title="Log in" />
+            <Head title="Connexion" />
 
-            {status && (
-                <div className="mb-4 text-sm font-medium text-green-600">
-                    {status}
+            <section className="authPage">
+                <div className="authShell">
+                    <div className="authIntro">
+                        <span className="eyebrow">Espace client</span>
+                        <h1>Connectez-vous pour suivre vos commandes et retrouver vos favoris</h1>
+                        <p>
+                            Accedez a votre panier, vos recherches recentes et vos informations de livraison
+                            depuis un espace simple et centralise.
+                        </p>
+                        <ul>
+                            <li>Suivi de commande plus rapide</li>
+                            <li>Favoris et panier synchronises</li>
+                            <li>Paiement et livraison simplifies</li>
+                        </ul>
+                    </div>
+
+                    <div className="authCard">
+                        <div className="authCardHead">
+                            <h2>Se connecter</h2>
+                            <p>Utilisez votre email et votre mot de passe pour acceder a votre compte.</p>
+                        </div>
+
+                        {status && <p className="authStatus">{status}</p>}
+
+                        <form onSubmit={submit} className="authForm">
+                            <label>
+                                <span>Email</span>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={data.email}
+                                    autoComplete="username"
+                                    onChange={(event) => setData("email", event.target.value)}
+                                />
+                                {errors.email && <small>{errors.email}</small>}
+                            </label>
+
+                            <label>
+                                <span>Mot de passe</span>
+                                <input
+                                    type="password"
+                                    name="password"
+                                    value={data.password}
+                                    autoComplete="current-password"
+                                    onChange={(event) => setData("password", event.target.value)}
+                                />
+                                {errors.password && <small>{errors.password}</small>}
+                            </label>
+
+                            <label className="checkboxRow">
+                                <input
+                                    type="checkbox"
+                                    checked={data.remember}
+                                    onChange={(event) => setData("remember", event.target.checked)}
+                                />
+                                <span>Se souvenir de moi</span>
+                            </label>
+
+                            <button type="submit" disabled={processing} className="primaryAction">
+                                {processing ? "Connexion..." : "Se connecter"}
+                            </button>
+                        </form>
+
+                        <div className="authLinks">
+                            <Link href="/register">Creer un compte</Link>
+                            {canResetPassword && <Link href={route("password.request")}>Mot de passe oublie ?</Link>}
+                        </div>
+                    </div>
                 </div>
-            )}
-
-            <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="email" value="Email" />
-
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        isFocused={true}
-                        onChange={(e) => setData('email', e.target.value)}
-                    />
-
-                    <InputError message={errors.email} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
-
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="current-password"
-                        onChange={(e) => setData('password', e.target.value)}
-                    />
-
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
-
-                <div className="mt-4 block">
-                    <label className="flex items-center">
-                        <Checkbox
-                            name="remember"
-                            checked={data.remember}
-                            onChange={(e) =>
-                                setData(
-                                    'remember',
-                                    (e.target.checked || false) as false,
-                                )
-                            }
-                        />
-                        <span className="ms-2 text-sm text-gray-600">
-                            Remember me
-                        </span>
-                    </label>
-                </div>
-
-                <div className="mt-4 flex items-center justify-end">
-                    {canResetPassword && (
-                        <Link
-                            href={route('password.request')}
-                            className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                        >
-                            Forgot your password?
-                        </Link>
-                    )}
-
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Log in
-                    </PrimaryButton>
-                </div>
-            </form>
+            </section>
         </GuestLayout>
     );
 }

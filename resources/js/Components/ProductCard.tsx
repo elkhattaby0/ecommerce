@@ -6,7 +6,7 @@ type Props = {
 
 export default function ProductCard({ product }: Props) {
     return (
-        <a href="#" className="card">
+        <a href="/details" className="card">
             <button className="wishlist">
                 <i className="fa-regular fa-heart"></i>
             </button>
@@ -51,6 +51,36 @@ export default function ProductCard({ product }: Props) {
                 ))}
             </ul>
 
+            {(product.variant || product.colorDots?.length || product.trust) && (
+                <div className="meta">
+                    {product.variant && (
+                        <p className="variant">
+                            <i className="fa-solid fa-layer-group"></i>
+                            {product.variant}
+                        </p>
+                    )}
+
+                    {product.colorDots?.length ? (
+                        <div className="colors" aria-label="Couleurs disponibles">
+                            {product.colorDots.map((color, index) => (
+                                <span
+                                    key={`${color}-${index}`}
+                                    className="dot"
+                                    style={{ backgroundColor: color }}
+                                ></span>
+                            ))}
+                        </div>
+                    ) : null}
+
+                    {product.trust && (
+                        <p className="trust">
+                            <i className="fa-solid fa-shield-heart"></i>
+                            {product.trust}
+                        </p>
+                    )}
+                </div>
+            )}
+
             {product.oldPrice && (
                 <p className="price old">
                     {product.oldPrice}
@@ -68,7 +98,7 @@ export default function ProductCard({ product }: Props) {
                     {product.currency}
                 </span>
             </p>
-            <button className="panier"><i className="fa-solid fa-basket-shopping"></i> Ajoute au panier</button>
+            <button className="panier"><i className="fa-solid fa-basket-shopping"></i> Ajouter au panier</button>
         </a>
     )
 }

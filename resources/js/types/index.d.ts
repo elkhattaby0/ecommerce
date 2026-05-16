@@ -20,6 +20,9 @@ export type Product = {
     flags: string[]
     title: string
     info: string[]
+    variant?: string
+    trust?: string
+    colorDots?: string[]
     nbrAvis: number
     oldPrice?: number
     price: number

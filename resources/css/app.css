@@ -147,7 +147,7 @@ body {
     border-radius: 50px;
     padding: 5px 10px;
     font-size: 14px;
-    font-weight: 900;
+    font-weight: 700;
 }
 #header section.bottom a {
     color: var(--Background);
@@ -216,7 +216,7 @@ body {
 
 #footer .row.middle p {
     font-size: var(--text-size);
-    font-weight: 900;
+    font-weight: 700;
     color: #fff;
 }
 #footer .row.middle .col ul,
@@ -227,7 +227,7 @@ body {
 }
 #footer .row.middle li {
     font-size: 16px;
-    font-weight: 100;
+    font-weight: 400;
     color: var(--Borders);
 }
 
@@ -249,18 +249,71 @@ body {
 
 .homepage .hero {
     background: var(--Secondary);
-    height: 450px;
+    height: 520px;
     width: var(--fixed-width);
     width: 100%;
     border-radius: 0px;
     position: relative;
 }
+.homepage .hero .heroSlide {
+    position: relative;
+}
 .homepage .hero img {
     width: 100%;
-    height: 450px;
+    height: 520px;
     object-fit: cover;
     border-radius: 0px;
-    object-position: top;
+    object-position: center;
+}
+.homepage .hero .heroOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(17, 24, 39, 0.82) 0%, rgba(17, 24, 39, 0.52) 38%, rgba(17, 24, 39, 0.08) 100%);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 14px;
+    padding: 0 calc((100% - var(--fixed-width)) / 2);
+}
+.homepage .hero .heroOverlay .eyebrow {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 800;
+    color: #bfdbfe;
+}
+.homepage .hero .heroOverlay h1 {
+    font-size: 44px;
+    line-height: 1.05;
+    font-weight: 900;
+    max-width: 620px;
+}
+.homepage .hero .heroOverlay p {
+    font-size: 16px;
+    line-height: 1.6;
+    max-width: 560px;
+    color: rgba(255, 255, 255, 0.88);
+}
+.homepage .hero .heroOverlay .actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+}
+.homepage .hero .heroOverlay .actions a {
+    border-radius: 999px;
+    padding: 12px 18px;
+    font-size: 14px;
+    font-weight: 800;
+}
+.homepage .hero .heroOverlay .actions a.primary {
+    background: var(--Accent);
+    color: #fff;
+}
+.homepage .hero .heroOverlay .actions a.secondary {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.24);
 }
 
 .homepage .hero .slick-arrow {
@@ -289,32 +342,39 @@ body {
     flex-direction: column;
     gap: 20px;
 }
-.homepage .row.two  img {
-    aspect-ratio: 1 / 1;
-}
-.homepage .row.two  h3 {
-    text-align: center;
-    font-size: var(--text-size);
-    font-weight: 800;
-}
 .homepage .row .head {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 20px;
 }
 .homepage .row .head a {
     font-size: 13px;
     color: var(--Primary);
+    white-space: nowrap;
 }
 .homepage .row h2 {
     font-size: 20px;
     font-weight: 900;
+}
+.homepage .row .head .copy {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.homepage .row .head .copy p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #4b5563;
 }
 .homepage .row .content {
     display: flex;
     justify-content: space-between;
     gap: 10px;
     display: grid;
+    grid-template-columns: repeat(5, 1fr);
+}
+.homepage .row .content.productsGrid {
     grid-template-columns: repeat(5, 1fr);
 }
 
@@ -369,6 +429,35 @@ body {
     display: flex;
     align-items: center;
     gap: 3px;
+}
+.card .meta {
+    padding: 6px 10px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.card .meta .variant,
+.card .meta .trust {
+    font-size: 11px;
+    color: #4b5563;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.card .meta .trust {
+    font-weight: 700;
+}
+.card .meta .colors {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.card .meta .colors .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 999px;
+    border: 1px solid #d1d5db;
+    display: block;
 }
 .card .price {
     font-size: 20px;
@@ -443,16 +532,57 @@ body {
     display: flex;
     align-items: start;
     justify-content: end;
-    gap: 5px;
-    font-size: var(--text-size);
+    gap: 10px;
     aspect-ratio: 1 / 1;
-    padding: 20px 15px;
-    font-size: 20px;
-    font-weight: 900;
-    line-height: 1;
+    padding: 24px 18px;
     width: 100%;
     border-radius: 30px;
-    
+    border: none;
+}
+.card.trend strong {
+    font-size: 20px;
+    font-weight: 900;
+    line-height: 1.1;
+}
+.card.trend span {
+    font-size: 13px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.86);
+}
+.card.trend.highlight {
+    background: linear-gradient(135deg, var(--Primary), #1d4ed8);
+}
+.card.categoryCard {
+    padding-bottom: 0;
+    overflow: hidden;
+}
+.card.categoryCard img {
+    height: 220px;
+    object-fit: cover;
+    padding-top: 0;
+}
+.card.categoryCard .categoryBody {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.card.categoryCard .categoryBody .title {
+    padding: 0;
+    font-size: 18px;
+    font-weight: 800;
+    -webkit-line-clamp: unset;
+}
+.card.categoryCard .categoryBody p {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #4b5563;
+}
+.homepage .categoriesRow .content.categoryGrid {
+    grid-template-columns: repeat(4, 1fr);
+}
+.homepage .trendsRow .content.trendGrid {
+    grid-template-columns: repeat(5, 1fr);
 }
 .card button.panier {
     background: var(--Accent);
@@ -480,11 +610,13 @@ body {
 /* Listing */
 .CategoryListing {
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
 }
 .Listing {
     margin-top: 50px;
-    margin-bottom: 150px;
+    margin-bottom: 50px;
     width: var(--fixed-width);
     display: flex;
     gap: 20px;
@@ -508,8 +640,47 @@ body {
 .Listing aside h2 {
     font-size: 20px;
     font-weight: 600;
+}
+.Listing aside .filterTop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     padding-bottom: 15px;
     border-bottom: 1px solid var(--Borders);
+}
+.Listing aside .filterTop button {
+    font-size: 12px;
+    color: var(--Primary);
+    font-weight: 700;
+    width: auto;
+    margin-bottom: 0;
+}
+.Listing aside .activeFilters {
+    background: var(--Background);
+    border: 1px solid var(--Borders);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.Listing aside .activeFilters span {
+    font-size: 13px;
+    font-weight: 700;
+}
+.Listing aside .activeFilters .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.Listing aside .activeFilters .chips button {
+    width: auto;
+    background: #fff;
+    border: 1px solid var(--Borders);
+    border-radius: 999px;
+    padding: 5px 10px;
+    font-size: 12px;
+    margin-bottom: 0;
 }
 
 .Listing aside .tab:not(:last-child) {
@@ -525,6 +696,14 @@ body {
     font-weight: 500;
     /* background: red; */
     margin-bottom: 10px;
+}
+.Listing aside .tab ul {
+    display: none;
+}
+.Listing aside .tab ul.open {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
 .Listing aside ul li {
@@ -561,11 +740,28 @@ body {
     width: 100%;
     border: 1px solid var(--Borders);
 }
+.Listing .content .head.listingHead {
+    align-items: start;
+    gap: 20px;
+}
+.Listing .content .head .titleWrap {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.Listing .content .head .titleWrap p {
+    font-size: 14px;
+    max-width: 540px;
+    line-height: 1.6;
+    color: #4b5563;
+}
 
 .Listing .content .head .sort {
     display: flex;
     gap: 10px;
     align-items: center;
+    flex-wrap: wrap;
+    justify-content: end;
 }
 .Listing .content .head .sort p {
     font-size: 14px;
@@ -584,8 +780,46 @@ body {
 }
 .Listing .content .products {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 10px;
+}
+
+.CategoryListing .listingMerch {
+    width: var(--fixed-width);
+    margin-top: 10px;
+    margin-bottom: 150px;
+}
+.CategoryListing .listingMerch .sectionHead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+.CategoryListing .listingMerch .sectionHead h2 {
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--Secondary);
+}
+.CategoryListing .listingMerch .sectionHead a {
+    color: var(--Primary);
+    font-size: 13px;
+}
+.CategoryListing .listingMerch .spotlightGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.Listing .content .paginationWrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+.Listing .content .paginationWrap p {
+    font-size: 13px;
+    color: #6b7280;
 }
 
 .Listing .content .pagination {
@@ -630,47 +864,85 @@ body {
 
 /* Details */
 .Details {
-    /* border: 1px solid red; */
     width: var(--fixed-width);
     display: grid;
-    grid-template-columns: 60% 40%;
-    gap: 20px;
+    grid-template-columns: 58% 42%;
+    gap: 30px;
     margin-top: 50px;
-
+    padding: 30px;
+    background-color: #fff;
+    /* border-radius: 15px; */
+    /* border: 1px solid var(--Borders); */
 }
 
-.Details section.left {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 5px;
+.Details section.left .gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
-.Details section.left img {
-    background: #fff;
+.Details section.left .mainImage {
+    background: var(--Background);
+    /* border-radius: 15px; */
+    /* border: 1px solid var(--Borders); */
+    padding: 20px;
+}
+.Details section.left .mainImage img {
+    background: var(--Background);
     width: 100%;
-    height: 350px;
+    height: 480px;
     object-fit: contain;
+}
+.Details section.left .thumbnails {
+    display: flex;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+.Details section.left .thumbnails button {
+    border: 1px solid var(--Borders);
+    /* border-radius: 12px; */
+    background: #fff;
+    padding: 8px;
+    max-width: 100px;
+}
+.Details section.left .thumbnails button.active {
+    border-color: var(--Primary);
+    box-shadow: 0 0 0 1px var(--Primary);
+}
+.Details section.left .thumbnails button img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    aspect-ratio: 1 / 1;
 }
 
 .Details section.right {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 14px;
 }
 .Details section.right h1 {
     font-size: 25px;
     font-weight: 500;
-    line-height: 1;
+    line-height: 1.15;
 }
 
 .Details section.right .avis {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.Details section.right .avis .reviews {
+    font-size: 13px;
+}
+.Details section.right .avis .score {
+    font-size: 14px;
+    font-weight: 700;
 }
 .Details section.right .avis .note {
     display: flex;
     align-items: center;
-    font-size: 14px;
+    font-size: 10px;
 }
 .Details section.right .avis .note i:not(:last-child) {
     color: gold;
@@ -685,9 +957,10 @@ body {
     background: var(--Accent);
     color: var(--Background);
     border-radius: 5px;
-    padding: 5px 10px;
+    padding: 3px 10px;
     font-size: 12px;
-    font-weight: 800;
+    font-weight: 600;
+    margin-top: 5px;
 }
 
 .Details section.right .colors {
@@ -695,48 +968,160 @@ body {
     flex-direction: column;
     gap: 8px;
 }
-.Details section.right .colors .content {
+.Details section.right .variantBlock {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 10px;
+}
+.Details section.right .variantBlock p {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--Secondary);
+}
+.Details section.right .variantBlock .content {
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
     gap: 5px;
 }
-.Details section.right .colors p {
-    font-size: 14px;
-}
-.Details section.right .colors .content button {
-    aspect-ratio: 1 / 1;
-    width: 70px;
-    height: auto;
+.Details section.right .variantBlock .content.colors button {
+    width: 84px;
     border: 1px solid var(--Borders);
-    background: none;
-    padding: 8px;
+    background: #fff;
+    padding: 10px 6px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
 }
-.Details section.right .colors .content button img {
-    width: 100%;
-    object-fit: contain;
+.Details section.right .variantBlock .content.colors button.active,
+.Details section.right .variantBlock .content.storage button.active {
+    border-color: var(--Primary);
+    box-shadow: 0 0 0 1px var(--Primary);
+}
+.Details section.right .variantBlock .content.colors button span {
+    font-size: 12px;
+    font-weight: 600;
+}
+.Details section.right .variantBlock .content.colors button .swatch {
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px var(--Borders);
+    display: block;
+}
+.Details section.right .variantBlock .content.storage button {
+    border: 1px solid var(--Borders);
+    background: #fff;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.Details section.right .purchaseBox {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    /* background: var(--Background); */
+    /* border: 1px solid var(--Borders); */
+    /* border-radius: 15px; */
+    /* padding: 18px; */
+}
+
+.Details section.right .ctaRow {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 15px;
+}
+.Details section.right .quantityBox {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.Details section.right .quantityBox p {
+    font-size: 14px;
+    font-weight: 700;
+}
+.Details section.right .quantityControl {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--Borders);
+    border-radius: 999px;
+    overflow: hidden;
+    background: #fff;
+}
+.Details section.right .quantityControl button,
+.Details section.right .quantityControl span {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+.Details section.right .ctaButtons {
+    display: flex;
+    gap: 10px;
+    flex: 1;
+}
+.Details section.right .ctaButtons button {
+    flex: 1;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.Details section.right .ctaButtons .buyNow {
+    background: var(--Primary);
+    color: var(--Background);
+}
+.Details section.right .ctaButtons .addCart {
+    background: var(--Accent);
+    color: var(--Background);
+}
+.Details section.right .deliverySummary {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.Details section.right .deliverySummary div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--Secondary);
+}
+.Details section.right .deliverySummary i {
+    color: var(--Primary);
 }
 
 .Details section.right .caractristque {
-    border: 1px solid var(--Borders);
     display: flex;
     flex-direction: column;
-    gap: 0;
+    gap: 2px;
+    width: 100%;
 }
 .Details section.right .caractristque li {
     line-height: 1.3;
     display: flex;
     align-items: center;
-    padding: 5px 10px;
 }
-.Details section.right .caractristque li:not(:last-child) {
-    border-bottom: 1px solid var(--Borders);
-}
+
 .Details section.right .caractristque .name {
     font-size: 14px;
-    font-weight: 900;
+    font-weight: 500;
     color: var(--Secondary);
     height: 100%;
     width: 50%;
+    background: var(--Borders);
+    padding: 5px 10px;
 }
 .Details section.right .caractristque .value {
     font-size: 14px;
@@ -746,6 +1131,8 @@ body {
     width: 50%;
     display: flex;
     align-items: center;
+    padding: 5px 10px;
+    border: 1px solid var(--Borders);
 }
 .Details section.right .caractristque li ul {
     width: 50%;
@@ -761,6 +1148,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 3px;
+    margin: 5px 0;
 }
 
 .Details section.right .price .old {
@@ -781,13 +1169,496 @@ body {
     transform: translateY(-50%) rotate(-10deg);
 }
 .Details section.right .price .current {
-    font-size: 25px;
+    font-size: 30px;
     font-weight: 900;
     line-height: 1;
     color: var(--danger);
 }
+.Details section.right .price .saving {
+    color: var(--Accent);
+    font-size: 14px;
+    font-weight: 700;
+}
 .Details section.right .price .currency {
     font-size: 12px;
     margin-left: 2px;
+    color: var(--Secondary);
+}
+
+.Details section.right .trustGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+.Details section.right .trustCard {
+    background: #fff;
+    border: 1px solid var(--Borders);
+    border-radius: 12px;
+    padding: 14px;
+}
+.Details section.right .trustCard h3 {
+    font-size: 14px;
+    font-weight: 800;
+    margin-bottom: 6px;
+}
+.Details section.right .trustCard p {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #4b5563;
+}
+
+.CategoryListing .tabs {
+    margin-top: 50px;
+    width: var(--fixed-width);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.CategoryListing .tabs .head {
+    display: flex;
+    justify-content: start;
+    gap: 15px;
+}
+.CategoryListing .tabs .head button {
+    background: var(--Secondary);
+    color: var(--Background);
+    border-radius: 8px;
+    padding: 5px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    opacity: 0.7;
+}
+.CategoryListing .tabs .head button.active {
+    opacity: 1;
+    background: var(--Primary);
+}
+
+.CategoryListing .tabs .content .description,
+.CategoryListing .tabs .content .detailPanel {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--Secondary);
+    background: #fff;
+    /* border: 1px solid var(--Borders); */
+    padding: 20px 25px;
+    /* border-radius: 15px; */
+}
+.CategoryListing .tabs .content .description h2 {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+.CategoryListing .tabs .content .description ul {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.CategoryListing .tabs .content .description li {
+    position: relative;
+    padding-left: 18px;
+}
+.CategoryListing .tabs .content .description li::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    background: var(--Primary);
+    border-radius: 999px;
+    position: absolute;
+    left: 0;
+    top: 7px;
+}
+.specsPanel {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+.specsPanel .specRow {
+    background: var(--Background);
+    border: 1px solid var(--Borders);
+    border-radius: 12px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.specsPanel .specRow span {
+    font-size: 13px;
+    color: #6b7280;
+}
+.specsPanel .specRow strong {
+    font-size: 15px;
+    color: var(--Secondary);
+}
+.reviewsPanel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.reviewsPanel .reviewsSummary {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 20px;
+}
+.reviewsPanel .summaryScore {
+    background: var(--Background);
+    border: 1px solid var(--Borders);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.reviewsPanel .summaryScore strong {
+    font-size: 42px;
+    color: var(--Secondary);
+    line-height: 1;
+}
+.reviewsPanel .summaryScore span {
+    font-size: 16px;
+    font-weight: 700;
+}
+.reviewsPanel .summaryScore p {
+    font-size: 13px;
+    color: #6b7280;
+}
+.reviewsPanel .summaryBars {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.reviewsPanel .barRow {
+    display: grid;
+    grid-template-columns: 70px 1fr 50px;
+    gap: 10px;
+    align-items: center;
+}
+.reviewsPanel .barRow span,
+.reviewsPanel .barRow strong {
+    font-size: 13px;
+}
+.reviewsPanel .barTrack {
+    height: 10px;
+    border-radius: 999px;
+    background: var(--Borders);
+    overflow: hidden;
+}
+.reviewsPanel .barValue {
+    height: 100%;
+    background: var(--Primary);
+}
+.reviewsPanel .reviewList {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+.reviewsPanel .reviewCard {
+    background: var(--Background);
+    border: 1px solid var(--Borders);
+    border-radius: 12px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.reviewsPanel .reviewHead {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+.reviewsPanel .reviewHead h3 {
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.3;
+}
+.reviewsPanel .reviewHead p,
+.reviewsPanel .reviewCard p {
+    font-size: 13px;
+    color: #4b5563;
+}
+.faqPanel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.faqPanel .faqItem {
+    background: var(--Background);
+    border: 1px solid var(--Borders);
+    border-radius: 12px;
+    padding: 18px;
+}
+.faqPanel .faqItem h3 {
+    font-size: 15px;
+    font-weight: 800;
+    margin-bottom: 6px;
+}
+
+.detailSection {
+    width: var(--fixed-width);
+    margin-top: 50px;
+}
+.detailSection.relatedSection {
+    margin-bottom: 150px;
+}
+.detailSection .sectionHead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.detailSection .sectionHead h2 {
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--Secondary);
+}
+.detailSection .sectionHead a {
+    color: var(--Primary);
+    font-size: 13px;
+}
+.sellerGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+.sellerCard {
+    background: #fff;
+    border: 1px solid var(--Borders);
+    border-radius: 15px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.sellerCard i {
+    color: var(--Primary);
+    font-size: 22px;
+}
+.sellerCard h3 {
+    font-size: 16px;
+    font-weight: 800;
+}
+.sellerCard p {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #4b5563;
+}
+.relatedGrid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+
+
+/* Auth + Utility pages */
+.authPage,
+.utilityPage {
+    width: var(--fixed-width);
+    margin: 50px auto 150px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+.authShell {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 24px;
+}
+.authIntro,
+.authCard,
+.utilityHero,
+.utilityCard {
+    background: #fff;
+    border: 1px solid var(--Borders);
+    border-radius: 20px;
+    padding: 28px;
+}
+.authIntro,
+.utilityHero {
+    background: linear-gradient(135deg, #eff6ff 0%, #ffffff 55%);
+}
+.authIntro .eyebrow,
+.utilityHero .eyebrow {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--Primary);
+    font-weight: 800;
+}
+.authIntro h1,
+.utilityHero h1 {
+    font-size: 34px;
+    line-height: 1.1;
+    font-weight: 900;
+    color: var(--Secondary);
+    margin: 10px 0 12px;
+}
+.authIntro p,
+.utilityHero p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #4b5563;
+}
+.authIntro ul {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 18px;
+}
+.authIntro li {
+    font-size: 14px;
+    color: var(--Secondary);
+    position: relative;
+    padding-left: 18px;
+}
+.authIntro li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--Accent);
+}
+.authCardHead h2,
+.utilityCardHead h2 {
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--Secondary);
+}
+.authCardHead p {
+    margin-top: 6px;
+    font-size: 14px;
+    color: #6b7280;
+}
+.authStatus {
+    margin-top: 16px;
+    background: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 14px;
+}
+.authForm {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 18px;
+}
+.authForm label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.authForm label span {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--Secondary);
+}
+.authForm input {
+    height: 48px;
+    border: 1px solid var(--Borders);
+    border-radius: 12px;
+    padding: 0 14px;
+    font-size: 14px;
+    background: var(--Background);
+}
+.authForm small {
+    color: var(--danger);
+    font-size: 12px;
+}
+.authForm .checkboxRow {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+.authForm .checkboxRow input {
+    width: 18px;
+    height: 18px;
+}
+.primaryAction {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--Primary);
+    color: #fff;
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 14px;
+    font-weight: 800;
+}
+.authLinks {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 16px;
+}
+.authLinks a,
+.utilityCardHead a,
+.utilityList a {
+    color: var(--Primary);
+    font-size: 13px;
+    font-weight: 700;
+}
+.utilityGrid {
+    display: grid;
+    grid-template-columns: 1.4fr 0.8fr;
+    gap: 20px;
+}
+.utilityGrid.single {
+    grid-template-columns: 1fr;
+}
+.utilityCardHead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 18px;
+}
+.utilityList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.utilityList li {
+    border: 1px solid var(--Borders);
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    background: var(--Background);
+}
+.utilityList li div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.utilityList li strong,
+.utilityList li span {
+    font-size: 14px;
+    color: var(--Secondary);
+}
+.utilityList li small {
+    font-size: 12px;
+    color: #6b7280;
+}
+.utilityCard.summary {
+    height: fit-content;
+}
+.summaryList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.summaryList li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    font-size: 14px;
     color: var(--Secondary);
 }

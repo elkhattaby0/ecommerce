@@ -28,6 +28,15 @@ Route::get('/details', function () {
         'products' => [],
     ]);
 })->name('details.index');
+Route::get('/mes-recherches', function () {
+    return Inertia::render('Customer/Searches');
+})->name('searches.index');
+Route::get('/favoris', function () {
+    return Inertia::render('Customer/Favorites');
+})->name('favorites.index');
+Route::get('/panier', function () {
+    return Inertia::render('Customer/Cart');
+})->name('cart.index');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

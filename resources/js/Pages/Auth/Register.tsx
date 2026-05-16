@@ -1,121 +1,109 @@
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
+import GuestLayout from "@/Layouts/GuestLayout";
+import { Head, Link, useForm } from "@inertiajs/react";
+import { FormEvent } from "react";
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
-        name: '',
-        email: '',
-        password: '',
-        password_confirmation: '',
+        name: "",
+        email: "",
+        password: "",
+        password_confirmation: "",
     });
 
-    const submit: FormEventHandler = (e) => {
-        e.preventDefault();
+    const submit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
-        post(route('register'), {
-            onFinish: () => reset('password', 'password_confirmation'),
+        post(route("register"), {
+            onFinish: () => reset("password", "password_confirmation"),
         });
     };
 
     return (
         <GuestLayout>
-            <Head title="Register" />
+            <Head title="Inscription" />
 
-            <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="name" value="Name" />
+            <section className="authPage">
+                <div className="authShell">
+                    <div className="authIntro">
+                        <span className="eyebrow">Nouveau client</span>
+                        <h1>Creez votre compte pour enregistrer vos produits et passer commande plus vite</h1>
+                        <p>
+                            Un seul compte pour enregistrer vos adresses, conserver vos coups de coeur
+                            et suivre vos achats sans friction.
+                        </p>
+                        <ul>
+                            <li>Panier conserve entre vos visites</li>
+                            <li>Acces rapide aux produits consultes</li>
+                            <li>Gestion simple de vos commandes</li>
+                        </ul>
+                    </div>
 
-                    <TextInput
-                        id="name"
-                        name="name"
-                        value={data.name}
-                        className="mt-1 block w-full"
-                        autoComplete="name"
-                        isFocused={true}
-                        onChange={(e) => setData('name', e.target.value)}
-                        required
-                    />
+                    <div className="authCard">
+                        <div className="authCardHead">
+                            <h2>Creer un compte</h2>
+                            <p>Renseignez vos informations pour ouvrir votre espace client.</p>
+                        </div>
 
-                    <InputError message={errors.name} className="mt-2" />
+                        <form onSubmit={submit} className="authForm">
+                            <label>
+                                <span>Nom complet</span>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    value={data.name}
+                                    autoComplete="name"
+                                    onChange={(event) => setData("name", event.target.value)}
+                                />
+                                {errors.name && <small>{errors.name}</small>}
+                            </label>
+
+                            <label>
+                                <span>Email</span>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={data.email}
+                                    autoComplete="username"
+                                    onChange={(event) => setData("email", event.target.value)}
+                                />
+                                {errors.email && <small>{errors.email}</small>}
+                            </label>
+
+                            <label>
+                                <span>Mot de passe</span>
+                                <input
+                                    type="password"
+                                    name="password"
+                                    value={data.password}
+                                    autoComplete="new-password"
+                                    onChange={(event) => setData("password", event.target.value)}
+                                />
+                                {errors.password && <small>{errors.password}</small>}
+                            </label>
+
+                            <label>
+                                <span>Confirmation du mot de passe</span>
+                                <input
+                                    type="password"
+                                    name="password_confirmation"
+                                    value={data.password_confirmation}
+                                    autoComplete="new-password"
+                                    onChange={(event) => setData("password_confirmation", event.target.value)}
+                                />
+                                {errors.password_confirmation && <small>{errors.password_confirmation}</small>}
+                            </label>
+
+                            <button type="submit" disabled={processing} className="primaryAction">
+                                {processing ? "Creation..." : "Creer mon compte"}
+                            </button>
+                        </form>
+
+                        <div className="authLinks">
+                            <Link href="/login">J'ai deja un compte</Link>
+                        </div>
+                    </div>
                 </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="email" value="Email" />
-
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        onChange={(e) => setData('email', e.target.value)}
-                        required
-                    />
-
-                    <InputError message={errors.email} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
-
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
-                        onChange={(e) => setData('password', e.target.value)}
-                        required
-                    />
-
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel
-                        htmlFor="password_confirmation"
-                        value="Confirm Password"
-                    />
-
-                    <TextInput
-                        id="password_confirmation"
-                        type="password"
-                        name="password_confirmation"
-                        value={data.password_confirmation}
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
-                        onChange={(e) =>
-                            setData('password_confirmation', e.target.value)
-                        }
-                        required
-                    />
-
-                    <InputError
-                        message={errors.password_confirmation}
-                        className="mt-2"
-                    />
-                </div>
-
-                <div className="mt-4 flex items-center justify-end">
-                    <Link
-                        href={route('login')}
-                        className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    >
-                        Already registered?
-                    </Link>
-
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Register
-                    </PrimaryButton>
-                </div>
-            </form>
+            </section>
         </GuestLayout>
     );
 }

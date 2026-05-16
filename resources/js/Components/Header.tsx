@@ -29,11 +29,11 @@ export default function Header() {
                 </div>
 
                 <ul className="topRight">
-                    <li><a href="#"><i className="fa-regular fa-bell"></i>Mes recherches</a></li>
-                    <li><a href="#"><i className="fa-regular fa-heart"></i>Favoris</a></li>
+                    <li><a href="/mes-recherches"><i className="fa-regular fa-bell"></i>Mes recherches</a></li>
+                    <li><a href="/favoris"><i className="fa-regular fa-heart"></i>Favoris</a></li>
                     {/* <li><a href="#"><i className="fa-regular fa-comment-dots"></i>Messages</a></li> */}
-                    <li><a href="#"><i className="fa-solid fa-basket-shopping"></i>Mon panier</a></li>
-                    <li><a href="#"><i className="fa-regular fa-user"></i>Se connecter</a></li>
+                    <li><a href="/panier"><i className="fa-solid fa-basket-shopping"></i>Mon panier</a></li>
+                    <li><a href="/login"><i className="fa-regular fa-user"></i>Se connecter</a></li>
                 </ul>
             </section>
 
