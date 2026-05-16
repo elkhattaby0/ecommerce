@@ -36,7 +36,7 @@ jobs:
           cache: 'npm'   
 
       - name: Install PHP dependencies
-        run: composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Prepare environment
         run: |
