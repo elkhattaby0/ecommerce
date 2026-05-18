@@ -38,7 +38,11 @@ export default function Header() {
             </section>
 
             <section className="bottom">
-                <button><i className="fa-solid fa-bars"></i>MENU</button>
+                <button
+                    onClick={()=> {
+                        document.getElementById('SideHeaderMenu')?.classList.add("active")
+                    }}
+                ><i className="fa-solid fa-bars"></i>MENU</button>
                 <ul>
                     <li><a href="#">Promos</a></li>
                     <li><a href="#">Vêtements</a></li>

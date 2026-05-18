@@ -1,56 +1,73 @@
-import InputError from '@/Components/InputError';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, useForm } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
+import GuestLayout from "@/Layouts/GuestLayout";
+import { Head, Link, useForm } from "@inertiajs/react";
+import { FormEvent } from "react";
 
 export default function ForgotPassword({ status }: { status?: string }) {
     const { data, setData, post, processing, errors } = useForm({
-        email: '',
+        email: "",
     });
 
-    const submit: FormEventHandler = (e) => {
-        e.preventDefault();
+    const submit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
-        post(route('password.email'));
+        post(route("password.email"));
     };
 
     return (
         <GuestLayout>
-            <Head title="Forgot Password" />
+            <Head title="Mot de passe oublie" />
 
-            <div className="mb-4 text-sm text-gray-600">
-                Forgot your password? No problem. Just let us know your email
-                address and we will email you a password reset link that will
-                allow you to choose a new one.
-            </div>
+            <section className="authPage">
+                <div className="authShell">
+                    <div className="authIntro">
+                        <span className="eyebrow">Recuperation</span>
+                        <h1>Recevez un lien de reinitialisation et retrouvez rapidement votre espace client</h1>
+                        <p>
+                            Entrez l&apos;adresse email associee a votre compte et nous vous enverrons
+                            un lien securise pour choisir un nouveau mot de passe.
+                        </p>
+                        <ul>
+                            <li>Lien de reinitialisation envoye par email</li>
+                            <li>Acces rapide a votre compte et a vos commandes</li>
+                            <li>Procedure simple en quelques etapes</li>
+                        </ul>
+                    </div>
 
-            {status && (
-                <div className="mb-4 text-sm font-medium text-green-600">
-                    {status}
+                    <div className="authCard">
+                        <div className="authCardHead">
+                            <h2>Mot de passe oublie ?</h2>
+                            <p>Saisissez votre email pour recevoir un lien de reinitialisation.</p>
+                        </div>
+
+                        {status && <p className="authStatus">{status}</p>}
+
+                        <form onSubmit={submit} className="authForm">
+                            <label>
+                                <span>Email</span>
+                                <input
+                                    id="email"
+                                    type="email"
+                                    name="email"
+                                    value={data.email}
+                                    autoComplete="username"
+                                    autoFocus
+                                    onChange={(event) => setData("email", event.target.value)}
+                                />
+                                {errors.email && <small>{errors.email}</small>}
+                            </label>
+
+                            <button type="submit" disabled={processing} className="primaryAction">
+                                {processing ? "Envoi..." : "Envoyer le lien"}
+                            </button>
+                        </form>
+
+                        <div className="authLinks">
+                            <Link href="/login">Retour a la connexion</Link>
+                            <Link href="/register">Creer un compte</Link>
+                        </div>
+                    </div>
                 </div>
-            )}
-
-            <form onSubmit={submit}>
-                <TextInput
-                    id="email"
-                    type="email"
-                    name="email"
-                    value={data.email}
-                    className="mt-1 block w-full"
-                    isFocused={true}
-                    onChange={(e) => setData('email', e.target.value)}
-                />
-
-                <InputError message={errors.email} className="mt-2" />
-
-                <div className="mt-4 flex items-center justify-end">
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Email Password Reset Link
-                    </PrimaryButton>
-                </div>
-            </form>
+            </section>
         </GuestLayout>
     );
 }

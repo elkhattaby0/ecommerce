@@ -1,3 +1,5 @@
+import SideHeaderMenu from "./SideHeaderMenu";
+
 export default function Footer() {
     return (
         <footer id="footer">
@@ -51,6 +53,7 @@ export default function Footer() {
             <section className="row bottom">
                 <p>© 2026 ecommerce entreprise Marocaine. Tous droits réservés.</p>
             </section>
+            <SideHeaderMenu />
         </footer>
     )
 }
