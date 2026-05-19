@@ -1,14 +1,18 @@
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head } from "@inertiajs/react";
-
-const searches = [
-    "iPhone 14 reconditionne",
-    "ecouteurs bluetooth",
-    "livraison gratuite smartphone",
-    "montre connectee sport",
-];
+import { readSearches } from "@/lib/storefront";
+import { useEffect, useState } from "react";
 
 export default function Searches() {
+    const [searches, setSearches] = useState(readSearches());
+
+    useEffect(() => {
+        const sync = () => setSearches(readSearches());
+        window.addEventListener("storefront:searches-updated", sync);
+
+        return () => window.removeEventListener("storefront:searches-updated", sync);
+    }, []);
+
     return (
         <GuestLayout>
             <Head title="Mes recherches" />
@@ -30,7 +34,7 @@ export default function Searches() {
                             {searches.map((item) => (
                                 <li key={item}>
                                     <span>{item}</span>
-                                    <a href="/products">Relancer</a>
+                                    <a href={`/products?q=${encodeURIComponent(item)}`}>Relancer</a>
                                 </li>
                             ))}
                         </ul>

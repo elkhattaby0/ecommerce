@@ -276,7 +276,7 @@ body {
 }
 
 #footer .row.top {
-    border-bottom: 1px solid var(--Primary);
+    /* border-bottom: 1px solid var(--Primary); */
     padding-bottom: 20px;
 }
 #footer .row.top  li {

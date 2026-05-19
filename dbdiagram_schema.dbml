@@ -1,0 +1,653 @@
+// ════════════════════════════════════════════════════════
+//  SAAS E-COMMERCE — dbdiagram.io compatible schema
+// ════════════════════════════════════════════════════════
+
+
+// ─── MULTI-TENANCY ───────────────────────────────────────
+
+Table stores {
+  id              int         [pk, increment]
+  owner_id        int
+  name            varchar     [not null]
+  slug            varchar     [unique, not null]
+  logo_url        varchar
+  description     text
+  plan            varchar     [not null, default: 'free']
+  plan_expires_at datetime
+  is_active       boolean     [default: true]
+  created_at      datetime    [default: `now()`]
+  updated_at      datetime
+}
+
+
+// ─── AUTH & USERS ────────────────────────────────────────
+
+Table users {
+  id                int       [pk, increment]
+  store_id          int
+  role_id           int
+  first_name        varchar   [not null]
+  last_name         varchar   [not null]
+  email             varchar   [unique, not null]
+  phone             varchar
+  avatar_url        varchar
+  password_hash     varchar   [not null]
+  gender            varchar
+  email_verified_at datetime
+  last_login_at     datetime
+  is_active         boolean   [default: true]
+  deleted_at        datetime
+  created_at        datetime  [default: `now()`]
+  updated_at        datetime
+
+  indexes {
+    email
+    store_id
+    role_id
+  }
+}
+
+Table roles {
+  id          int     [pk, increment]
+  name        varchar [unique, not null]
+  description varchar
+}
+
+Table permissions {
+  id          int     [pk, increment]
+  name        varchar [unique, not null]
+  description varchar
+}
+
+Table role_permissions {
+  role_id       int [not null]
+  permission_id int [not null]
+
+  indexes {
+    (role_id, permission_id) [pk]
+  }
+}
+
+Table sessions {
+  id         varchar  [pk]
+  user_id    int      [not null]
+  ip_address varchar
+  user_agent text
+  expires_at datetime [not null]
+  created_at datetime [default: `now()`]
+}
+
+Table password_resets {
+  id         int      [pk, increment]
+  email      varchar  [not null]
+  token      varchar  [not null]
+  expires_at datetime [not null]
+  created_at datetime [default: `now()`]
+}
+
+
+// ─── SELLER PROFILES ─────────────────────────────────────
+
+Table seller_profiles {
+  id               int     [pk, increment]
+  user_id          int     [unique, not null]
+  store_id         int     [not null]
+  shop_name        varchar
+  shop_description text
+  shop_logo_url    varchar
+  rating           decimal
+  total_sales      int     [default: 0]
+  is_verified      boolean [default: false]
+  payout_method    varchar
+  payout_details   text
+  created_at       datetime [default: `now()`]
+  updated_at       datetime
+}
+
+
+// ─── USER ADDRESSES ──────────────────────────────────────
+
+Table user_addresses {
+  id            int     [pk, increment]
+  user_id       int     [not null]
+  label         varchar
+  full_name     varchar
+  phone         varchar
+  address_line1 varchar [not null]
+  address_line2 varchar
+  city          varchar [not null]
+  state         varchar
+  postal_code   varchar
+  country_code  varchar [not null]
+  is_default    boolean [default: false]
+  created_at    datetime [default: `now()`]
+  updated_at    datetime
+}
+
+
+// ─── CATEGORIES & BRANDS ─────────────────────────────────
+
+Table categories {
+  id          int     [pk, increment]
+  store_id    int     [not null]
+  parent_id   int
+  name        varchar [not null]
+  slug        varchar [not null]
+  description text
+  image_url   varchar
+  sort_order  int     [default: 0]
+  is_active   boolean [default: true]
+  created_at  datetime [default: `now()`]
+  updated_at  datetime
+
+  indexes {
+    (store_id, slug) [unique]
+  }
+}
+
+Table brands {
+  id         int     [pk, increment]
+  name       varchar [not null]
+  slug       varchar [unique, not null]
+  logo_url   varchar
+  created_at datetime [default: `now()`]
+}
+
+
+// ─── PRODUCTS ────────────────────────────────────────────
+
+Table products {
+  id                int      [pk, increment]
+  store_id          int      [not null]
+  seller_id         int      [not null]
+  category_id       int      [not null]
+  brand_id          int
+
+  name              varchar  [not null]
+  slug              varchar  [not null]
+  description       text
+  short_description varchar
+
+  base_price        decimal  [not null]
+  currency_code     varchar  [default: 'MAD']
+
+  condition         varchar  [not null]
+  warranty_months   int
+  weight_grams      int
+  shipping_class    varchar
+
+  is_active         boolean  [default: true]
+  is_featured       boolean  [default: false]
+  deleted_at        datetime
+  published_at      datetime
+  created_at        datetime [default: `now()`]
+  updated_at        datetime
+
+  indexes {
+    (store_id, slug) [unique]
+    seller_id
+    category_id
+    is_active
+  }
+}
+
+Table product_variants {
+  id             int     [pk, increment]
+  product_id     int     [not null]
+  sku            varchar [unique, not null]
+  label          varchar
+  price_override decimal
+  stock          int     [default: 0]
+  is_active      boolean [default: true]
+  created_at     datetime [default: `now()`]
+  updated_at     datetime
+}
+
+Table variant_options {
+  id           int     [pk, increment]
+  variant_id   int     [not null]
+  option_name  varchar [not null]
+  option_value varchar [not null]
+}
+
+Table product_images {
+  id         int     [pk, increment]
+  product_id int     [not null]
+  variant_id int
+  url        varchar [not null]
+  alt_text   varchar
+  sort_order int     [default: 0]
+  is_main    boolean [default: false]
+}
+
+Table product_attributes {
+  id         int     [pk, increment]
+  product_id int     [not null]
+  key        varchar [not null]
+  value      varchar [not null]
+  sort_order int     [default: 0]
+}
+
+Table product_flags {
+  id         int     [pk, increment]
+  product_id int     [not null]
+  type       varchar [not null]
+  expires_at datetime
+}
+
+Table product_discounts {
+  id             int     [pk, increment]
+  product_id     int     [not null]
+  discount_type  varchar [not null]
+  discount_value decimal [not null]
+  starts_at      datetime
+  expires_at     datetime
+  is_active      boolean [default: true]
+  created_at     datetime [default: `now()`]
+}
+
+Table product_reviews {
+  id                   int     [pk, increment]
+  product_id           int     [not null]
+  user_id              int     [not null]
+  order_item_id        int
+  rating               int     [not null]
+  title                varchar
+  comment              text
+  helpful_count        int     [default: 0]
+  is_verified_purchase boolean [default: false]
+  is_published         boolean [default: true]
+  created_at           datetime [default: `now()`]
+  updated_at           datetime
+}
+
+Table review_media {
+  id        int     [pk, increment]
+  review_id int     [not null]
+  url       varchar [not null]
+  type      varchar
+}
+
+Table product_faq {
+  id           int     [pk, increment]
+  product_id   int     [not null]
+  question     text    [not null]
+  answer       text
+  asked_by     int
+  answered_by  int
+  is_published boolean [default: false]
+  created_at   datetime [default: `now()`]
+}
+
+
+// ─── COUPONS ─────────────────────────────────────────────
+
+Table coupons {
+  id                  int     [pk, increment]
+  store_id            int     [not null]
+  code                varchar [unique, not null]
+  description         varchar
+  type                varchar [not null]
+  value               decimal [not null]
+  min_order_amount    decimal
+  max_discount_amount decimal
+  usage_limit         int
+  usage_count         int     [default: 0]
+  per_user_limit      int     [default: 1]
+  is_active           boolean [default: true]
+  starts_at           datetime
+  expires_at          datetime
+  created_at          datetime [default: `now()`]
+}
+
+Table coupon_usages {
+  id              int     [pk, increment]
+  coupon_id       int     [not null]
+  user_id         int     [not null]
+  order_id        int     [not null]
+  discount_amount decimal [not null]
+  used_at         datetime [default: `now()`]
+}
+
+
+// ─── CART ────────────────────────────────────────────────
+
+Table carts {
+  id         int     [pk, increment]
+  store_id   int     [not null]
+  user_id    int
+  session_id varchar
+  coupon_id  int
+  expires_at datetime
+  created_at datetime [default: `now()`]
+  updated_at datetime
+}
+
+Table cart_items {
+  id         int     [pk, increment]
+  cart_id    int     [not null]
+  product_id int     [not null]
+  variant_id int
+  quantity   int     [not null, default: 1]
+  unit_price decimal [not null]
+  created_at datetime [default: `now()`]
+  updated_at datetime
+}
+
+
+// ─── WISHLIST ────────────────────────────────────────────
+
+Table wishlists {
+  id         int     [pk, increment]
+  user_id    int     [not null]
+  name       varchar [default: 'Default']
+  is_public  boolean [default: false]
+  created_at datetime [default: `now()`]
+}
+
+Table wishlist_items {
+  id          int  [pk, increment]
+  wishlist_id int  [not null]
+  product_id  int  [not null]
+  variant_id  int
+  added_at    datetime [default: `now()`]
+
+  indexes {
+    (wishlist_id, product_id) [unique]
+  }
+}
+
+
+// ─── ORDERS ──────────────────────────────────────────────
+
+Table orders {
+  id         int     [pk, increment]
+  store_id   int     [not null]
+  user_id    int     [not null]
+  coupon_id  int
+
+  shipping_full_name     varchar
+  shipping_phone         varchar
+  shipping_address_line1 varchar
+  shipping_address_line2 varchar
+  shipping_city          varchar
+  shipping_state         varchar
+  shipping_postal_code   varchar
+  shipping_country_code  varchar
+
+  subtotal        decimal [not null]
+  shipping_cost   decimal [default: 0]
+  discount_amount decimal [default: 0]
+  tax_amount      decimal [default: 0]
+  total           decimal [not null]
+  currency_code   varchar [default: 'MAD']
+
+  status           varchar [not null, default: 'pending']
+  notes            text
+  cancelled_reason varchar
+  cancelled_at     datetime
+  created_at       datetime [default: `now()`]
+  updated_at       datetime
+
+  indexes {
+    user_id
+    store_id
+    status
+    created_at
+  }
+}
+
+Table order_items {
+  id            int     [pk, increment]
+  order_id      int     [not null]
+  product_id    int     [not null]
+  variant_id    int
+  seller_id     int     [not null]
+  product_name  varchar [not null]
+  product_sku   varchar
+  variant_label varchar
+  unit_price    decimal [not null]
+  quantity      int     [not null]
+  subtotal      decimal [not null]
+  status        varchar [default: 'pending']
+}
+
+Table order_status_history {
+  id         int     [pk, increment]
+  order_id   int     [not null]
+  status     varchar [not null]
+  note       text
+  changed_by int
+  created_at datetime [default: `now()`]
+}
+
+
+// ─── PAYMENTS ────────────────────────────────────────────
+
+Table payments {
+  id               int     [pk, increment]
+  order_id         int     [not null]
+  user_id          int     [not null]
+  method           varchar [not null]
+  status           varchar [not null, default: 'pending']
+  amount           decimal [not null]
+  currency_code    varchar [default: 'MAD']
+  transaction_id   varchar [unique]
+  gateway          varchar
+  gateway_response text
+  paid_at          datetime
+  created_at       datetime [default: `now()`]
+  updated_at       datetime
+}
+
+Table refunds {
+  id           int     [pk, increment]
+  order_id     int     [not null]
+  payment_id   int     [not null]
+  user_id      int     [not null]
+  amount       decimal [not null]
+  reason       text
+  status       varchar [default: 'pending']
+  approved_by  int
+  processed_at datetime
+  created_at   datetime [default: `now()`]
+}
+
+
+// ─── SHIPPING ────────────────────────────────────────────
+
+Table shipping {
+  id                 int     [pk, increment]
+  order_id           int     [not null]
+  carrier            varchar
+  tracking_number    varchar
+  status             varchar [default: 'pending']
+  estimated_delivery datetime
+  shipped_at         datetime
+  delivered_at       datetime
+  created_at         datetime [default: `now()`]
+  updated_at         datetime
+}
+
+Table shipping_events {
+  id          int     [pk, increment]
+  shipping_id int     [not null]
+  status      varchar [not null]
+  location    varchar
+  description text
+  occurred_at datetime [not null]
+  created_at  datetime [default: `now()`]
+}
+
+
+// ─── NOTIFICATIONS ───────────────────────────────────────
+
+Table notifications {
+  id         int     [pk, increment]
+  user_id    int     [not null]
+  type       varchar [not null]
+  title      varchar [not null]
+  body       text
+  data       text
+  is_read    boolean [default: false]
+  read_at    datetime
+  created_at datetime [default: `now()`]
+}
+
+
+// ─── ANALYTICS ───────────────────────────────────────────
+
+Table search_history {
+  id            int     [pk, increment]
+  store_id      int     [not null]
+  user_id       int
+  session_id    varchar
+  query         varchar [not null]
+  results_count int
+  created_at    datetime [default: `now()`]
+}
+
+Table product_views {
+  id         int     [pk, increment]
+  product_id int     [not null]
+  user_id    int
+  session_id varchar
+  ip_address varchar
+  viewed_at  datetime [default: `now()`]
+}
+
+
+// ════════════════════════════════════════════════════════
+//  REFERENCES
+// ════════════════════════════════════════════════════════
+
+// stores
+Ref: stores.owner_id > users.id
+
+// users
+Ref: users.store_id > stores.id
+Ref: users.role_id > roles.id
+
+// role_permissions
+Ref: role_permissions.role_id > roles.id
+Ref: role_permissions.permission_id > permissions.id
+
+// sessions
+Ref: sessions.user_id > users.id
+
+// seller_profiles
+Ref: seller_profiles.user_id > users.id
+Ref: seller_profiles.store_id > stores.id
+
+// user_addresses
+Ref: user_addresses.user_id > users.id
+
+// categories
+Ref: categories.store_id > stores.id
+Ref: categories.parent_id > categories.id
+
+// products
+Ref: products.store_id > stores.id
+Ref: products.seller_id > users.id
+Ref: products.category_id > categories.id
+Ref: products.brand_id > brands.id
+
+// product_variants
+Ref: product_variants.product_id > products.id
+
+// variant_options
+Ref: variant_options.variant_id > product_variants.id
+
+// product_images
+Ref: product_images.product_id > products.id
+Ref: product_images.variant_id > product_variants.id
+
+// product_attributes
+Ref: product_attributes.product_id > products.id
+
+// product_flags
+Ref: product_flags.product_id > products.id
+
+// product_discounts
+Ref: product_discounts.product_id > products.id
+
+// product_reviews
+Ref: product_reviews.product_id > products.id
+Ref: product_reviews.user_id > users.id
+Ref: product_reviews.order_item_id > order_items.id
+
+// review_media
+Ref: review_media.review_id > product_reviews.id
+
+// product_faq
+Ref: product_faq.product_id > products.id
+Ref: product_faq.asked_by > users.id
+Ref: product_faq.answered_by > users.id
+
+// coupons
+Ref: coupons.store_id > stores.id
+
+// coupon_usages
+Ref: coupon_usages.coupon_id > coupons.id
+Ref: coupon_usages.user_id > users.id
+Ref: coupon_usages.order_id > orders.id
+
+// carts
+Ref: carts.store_id > stores.id
+Ref: carts.user_id > users.id
+Ref: carts.coupon_id > coupons.id
+
+// cart_items
+Ref: cart_items.cart_id > carts.id
+Ref: cart_items.product_id > products.id
+Ref: cart_items.variant_id > product_variants.id
+
+// wishlists
+Ref: wishlists.user_id > users.id
+
+// wishlist_items
+Ref: wishlist_items.wishlist_id > wishlists.id
+Ref: wishlist_items.product_id > products.id
+Ref: wishlist_items.variant_id > product_variants.id
+
+// orders
+Ref: orders.store_id > stores.id
+Ref: orders.user_id > users.id
+Ref: orders.coupon_id > coupons.id
+
+// order_items
+Ref: order_items.order_id > orders.id
+Ref: order_items.product_id > products.id
+Ref: order_items.variant_id > product_variants.id
+Ref: order_items.seller_id > users.id
+
+// order_status_history
+Ref: order_status_history.order_id > orders.id
+Ref: order_status_history.changed_by > users.id
+
+// payments
+Ref: payments.order_id > orders.id
+Ref: payments.user_id > users.id
+
+// refunds
+Ref: refunds.order_id > orders.id
+Ref: refunds.payment_id > payments.id
+Ref: refunds.user_id > users.id
+Ref: refunds.approved_by > users.id
+
+// shipping
+Ref: shipping.order_id > orders.id
+
+// shipping_events
+Ref: shipping_events.shipping_id > shipping.id
+
+// notifications
+Ref: notifications.user_id > users.id
+
+// search_history
+Ref: search_history.store_id > stores.id
+Ref: search_history.user_id > users.id
+
+// product_views
+Ref: product_views.product_id > products.id
+Ref: product_views.user_id > users.id

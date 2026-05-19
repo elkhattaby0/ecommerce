@@ -1,13 +1,18 @@
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head } from "@inertiajs/react";
-
-const favorites = [
-    "APPLE iPhone 14 128GB Purple - Reconditionne - Excellent etat",
-    "Casque Bluetooth avec reduction de bruit",
-    "Montre connectee sport avec suivi sommeil",
-];
+import { readFavorites, toggleFavorite } from "@/lib/storefront";
+import { useEffect, useState } from "react";
 
 export default function Favorites() {
+    const [favorites, setFavorites] = useState(readFavorites());
+
+    useEffect(() => {
+        const sync = () => setFavorites(readFavorites());
+        window.addEventListener("storefront:favorites-updated", sync);
+
+        return () => window.removeEventListener("storefront:favorites-updated", sync);
+    }, []);
+
     return (
         <GuestLayout>
             <Head title="Favoris" />
@@ -27,9 +32,12 @@ export default function Favorites() {
                         </div>
                         <ul className="utilityList">
                             {favorites.map((item) => (
-                                <li key={item}>
-                                    <span>{item}</span>
-                                    <a href="/details">Voir le produit</a>
+                                <li key={item.id}>
+                                    <span>{item.title}</span>
+                                    <div style={{ display: "flex", gap: 10 }}>
+                                        <a href={item.slug ? route('details.show', item.slug) : "/products"}>Voir le produit</a>
+                                        <button type="button" onClick={() => toggleFavorite(item)}>Retirer</button>
+                                    </div>
                                 </li>
                             ))}
                         </ul>

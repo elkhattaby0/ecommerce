@@ -1,14 +1,41 @@
+import { addToCart, readFavorites, toggleFavorite } from "@/lib/storefront";
 import { Product } from "@/types"
+import { Link, usePage } from "@inertiajs/react";
+import { MouseEvent, useEffect, useState } from "react";
 
 type Props = {
     product: Product
 }
 
 export default function ProductCard({ product }: Props) {
+    const [isFavorite, setIsFavorite] = useState(false);
+    const user = usePage().props.auth.user;
+
+    useEffect(() => {
+        setIsFavorite(readFavorites().some((item) => item.id === product.id));
+    }, [product.id]);
+
+    const onFavorite = (event: MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+
+        if (!user) {
+            window.location.href = "/login";
+            return;
+        }
+
+        toggleFavorite(product);
+        setIsFavorite(readFavorites().some((item) => item.id === product.id));
+    };
+
+    const onAddToCart = (event: MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        addToCart(product, 1);
+    };
+
     return (
-        <a href="/details" className="card">
-            <button className="wishlist">
-                <i className="fa-regular fa-heart"></i>
+        <Link href={product.slug ? route('details.show', product.slug) : '/products'} className="card">
+            <button className="wishlist" onClick={onFavorite}>
+                <i className={`${isFavorite ? "fa-solid" : "fa-regular"} fa-heart`}></i>
             </button>
 
             {product.flags?.length > 0 && (
@@ -98,7 +125,7 @@ export default function ProductCard({ product }: Props) {
                     {product.currency}
                 </span>
             </p>
-            <button className="panier"><i className="fa-solid fa-basket-shopping"></i> Ajouter au panier</button>
-        </a>
+            <button className="panier" onClick={onAddToCart}><i className="fa-solid fa-basket-shopping"></i> Ajouter au panier</button>
+        </Link>
     )
 }

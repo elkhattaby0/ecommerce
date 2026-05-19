@@ -13,18 +13,32 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->unsignedBigInteger('store_id')->nullable();
+            $table->unsignedBigInteger('role_id')->nullable();
+            $table->string('first_name');
+            $table->string('last_name');
             $table->string('email')->unique();
+            $table->string('phone')->nullable();
+            $table->string('avatar_url')->nullable();
+            $table->string('password_hash');
+            $table->string('gender')->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->timestamp('last_login_at')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();
+
+            $table->index('store_id');
+            $table->index('role_id');
         });
 
-        Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
+        Schema::create('password_resets', function (Blueprint $table) {
+            $table->id();
+            $table->string('email')->index();
             $table->string('token');
-            $table->timestamp('created_at')->nullable();
+            $table->timestamp('expires_at')->nullable();
+            $table->timestamp('created_at')->useCurrent();
         });
 
         Schema::create('sessions', function (Blueprint $table) {
@@ -34,6 +48,8 @@ return new class extends Migration
             $table->text('user_agent')->nullable();
             $table->longText('payload');
             $table->integer('last_activity')->index();
+            $table->timestamp('expires_at')->nullable();
+            $table->timestamp('created_at')->useCurrent()->nullable();
         });
     }
 
@@ -42,8 +58,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+        Schema::dropIfExists('password_resets');
+        Schema::dropIfExists('users');
     }
 };

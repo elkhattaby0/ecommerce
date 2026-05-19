@@ -1,20 +1,23 @@
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head } from "@inertiajs/react";
-
-const cartItems = [
-    {
-        name: "APPLE iPhone 14 128GB Purple - Reconditionne - Excellent etat",
-        qty: 1,
-        price: "295.99 MAD",
-    },
-    {
-        name: "Chargeur USB-C rapide",
-        qty: 1,
-        price: "49.00 MAD",
-    },
-];
+import { readCart, removeFromCart, updateCartQuantity } from "@/lib/storefront";
+import { useEffect, useMemo, useState } from "react";
 
 export default function Cart() {
+    const [cartItems, setCartItems] = useState(readCart());
+
+    useEffect(() => {
+        const sync = () => setCartItems(readCart());
+        window.addEventListener("storefront:cart-updated", sync);
+
+        return () => window.removeEventListener("storefront:cart-updated", sync);
+    }, []);
+
+    const subtotal = useMemo(
+        () => cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+        [cartItems],
+    );
+
     return (
         <GuestLayout>
             <Head title="Mon panier" />
@@ -34,12 +37,17 @@ export default function Cart() {
                         </div>
                         <ul className="utilityList">
                             {cartItems.map((item) => (
-                                <li key={item.name}>
+                                <li key={item.id}>
                                     <div>
-                                        <strong>{item.name}</strong>
-                                        <small>Quantite : {item.qty}</small>
+                                        <strong>{item.title}</strong>
+                                        <small>Quantite : {item.quantity}</small>
+                                        <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+                                            <button type="button" onClick={() => updateCartQuantity(item.id, item.quantity - 1)}>-</button>
+                                            <button type="button" onClick={() => updateCartQuantity(item.id, item.quantity + 1)}>+</button>
+                                            <button type="button" onClick={() => removeFromCart(item.id)}>Supprimer</button>
+                                        </div>
                                     </div>
-                                    <span>{item.price}</span>
+                                    <span>{item.price} {item.currency}</span>
                                 </li>
                             ))}
                         </ul>
@@ -50,9 +58,9 @@ export default function Cart() {
                             <h2>Resume</h2>
                         </div>
                         <ul className="summaryList">
-                            <li><span>Sous-total</span><strong>344.99 MAD</strong></li>
+                            <li><span>Sous-total</span><strong>{subtotal.toFixed(2)} MAD</strong></li>
                             <li><span>Livraison</span><strong>Gratuite</strong></li>
-                            <li><span>Total</span><strong>344.99 MAD</strong></li>
+                            <li><span>Total</span><strong>{subtotal.toFixed(2)} MAD</strong></li>
                         </ul>
                         <a href="/login" className="primaryAction">Passer a la connexion</a>
                     </aside>

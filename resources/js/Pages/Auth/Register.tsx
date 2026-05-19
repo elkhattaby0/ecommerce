@@ -4,7 +4,8 @@ import { FormEvent } from "react";
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
-        name: "",
+        first_name: "",
+        last_name: "",
         email: "",
         password: "",
         password_confirmation: "",
@@ -46,15 +47,27 @@ export default function Register() {
 
                         <form onSubmit={submit} className="authForm">
                             <label>
-                                <span>Nom complet</span>
+                                <span>Prenom</span>
                                 <input
                                     type="text"
-                                    name="name"
-                                    value={data.name}
-                                    autoComplete="name"
-                                    onChange={(event) => setData("name", event.target.value)}
+                                    name="first_name"
+                                    value={data.first_name}
+                                    autoComplete="given-name"
+                                    onChange={(event) => setData("first_name", event.target.value)}
                                 />
-                                {errors.name && <small>{errors.name}</small>}
+                                {errors.first_name && <small>{errors.first_name}</small>}
+                            </label>
+
+                            <label>
+                                <span>Nom</span>
+                                <input
+                                    type="text"
+                                    name="last_name"
+                                    value={data.last_name}
+                                    autoComplete="family-name"
+                                    onChange={(event) => setData("last_name", event.target.value)}
+                                />
+                                {errors.last_name && <small>{errors.last_name}</small>}
                             </label>
 
                             <label>
